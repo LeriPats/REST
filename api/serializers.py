@@ -5,6 +5,11 @@ from api.models import ApiUser, Store, Item, Order
 
 
 class UserSerializer(serializers.Serializer):
+    class Meta:
+        model = ApiUser
+        fields = ('id', 'username', 'email', 'user_type', 'password')
+        extra_kwargs = {'password': {'write_only': True}}
+
     username = serializers.CharField(max_length=128, validators=[
         validators.UniqueValidator(ApiUser.objects.all())
     ])
@@ -37,15 +42,13 @@ class UserSerializer(serializers.Serializer):
 class StoreSerializer(serializers.ModelSerializer):
     class Meta:
         model = Store
-        fields = "__all__"
-        extra_kwargs = {"id": {"read_only": True}}
+        fields = ('id', 'name')
 
 
 class ItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = Item
-        fields = "__all__"
-        extra_kwargs = {"id": {"read_only": True}}
+        fields = ('id', 'name', 'quantity', 'store')
 
 
 class OrderSerializer(serializers.ModelSerializer):
@@ -53,3 +56,7 @@ class OrderSerializer(serializers.ModelSerializer):
         model = Order
         fields = "__all__"
         extra_kwargs = {"id": {"read_only": True}}
+
+
+class ValidationError:
+    pass
