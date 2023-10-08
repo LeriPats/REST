@@ -17,6 +17,7 @@ class UserSerializer(serializers.Serializer):
         validators.UniqueValidator(ApiUser.objects.all())
     ])
     password = serializers.CharField(min_length=6, max_length=20, write_only=True)
+    user_type = serializers.ChoiceField(choices=('consumer', 'supplier'))
 
     def update(self, instance, validated_data):
         if email := validated_data.get("email"):
@@ -36,6 +37,8 @@ class UserSerializer(serializers.Serializer):
 
         user.set_password(validated_data["password"])
         user.save(update_fields=["password"])
+        user.user_type = validated_data.get('user_type', 'consumer')
+        user.save()
         return user
 
 
@@ -58,5 +61,5 @@ class OrderSerializer(serializers.ModelSerializer):
         extra_kwargs = {"id": {"read_only": True}}
 
 
-class ValidationError:
+class ValidationError(Exception):
     pass
