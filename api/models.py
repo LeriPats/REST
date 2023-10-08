@@ -30,6 +30,7 @@ class Item(models.Model):
 class Order(models.Model):
     item = models.ForeignKey(Item, related_name='orders', on_delete=models.CASCADE)
     user = models.ForeignKey(ApiUser, related_name='orders', on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField()
 
     def __str__(self):
         return f"{self.user.username}; {self.item.store.name}; {self.item.name}"

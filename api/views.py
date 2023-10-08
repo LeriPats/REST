@@ -22,13 +22,11 @@ class StoreModelViewSet(viewsets.ModelViewSet):
     queryset = Store.objects.all()
     serializer_class = StoreSerializer
 
-    @action(detail=True)
-    def items(self, request, pk=None):
-        store = get_object_or_404(Store.objects.all(), id=pk)
-        available_items = store.items.filter(orders__isnull=True)
-        return Response(
-            ItemSerializer(available_items, many=True).data
-        )
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 class ItemModelViewSet(viewsets.ModelViewSet):
@@ -56,3 +54,20 @@ class ItemModelViewSet(viewsets.ModelViewSet):
 class OrderModelViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
+
+    def perform_create(self, serializer):
+        # Проверка типа пользователя
+        user = self.request.user
+        if user.user_type != 'consumer':
+            raise PermissionDenied("Только покупатели могут делать заказы.")
+        serializer.save()
+
+    def perform_update(self, serializer):
+        # Проверка типа пользователя и доступного количества товара на складе
+        user = self.request.user
+        if user.user_type != 'consumer':
+            raise PermissionDenied("Только покупатели могут изменять заказы.")
+        new_quantity = self.request.data.get('quantity')
+        if new_quantity and new_quantity < 0:
+            raise serializers.ValidationError("Количество товара не может быть отрицательным.")
+        serializer.save()
