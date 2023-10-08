@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework.authtoken.views import obtain_auth_token
-from api.views import StoreModelViewSet
+from api.views import StoreModelViewSet, OrderModelViewSet
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -25,4 +25,5 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls')),
     path('api-token-auth/', obtain_auth_token),
     path('warehouses/create/', StoreModelViewSet.as_view({'get': 'list'}), name='create-warehouse'),
+    path('products/<int:pk>/withdraw/', OrderModelViewSet.as_view(({'get': 'list'})), name='withdraw-product'),
 ]
