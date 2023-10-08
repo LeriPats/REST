@@ -1,5 +1,5 @@
 """
-URL configuration for REST project.
+URL configuration for booking project.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/4.2/topics/http/urls/
@@ -15,8 +15,15 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+from rest_framework.authtoken.views import obtain_auth_token
+from api.views import StoreModelViewSet, OrderModelViewSet
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
+    path('admin/', admin.site.urls),
+    path('', include("api.urls")),
+    path('api-auth/', include('rest_framework.urls')),
+    path('api-token-auth/', obtain_auth_token),
+    path('warehouses/create/', StoreModelViewSet.as_view({'get': 'list'}), name='create-warehouse'),
+    path('products/<int:pk>/withdraw/', OrderModelViewSet.as_view(({'get': 'list'})), name='withdraw-product'),
 ]
