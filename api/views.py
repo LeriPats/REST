@@ -1,7 +1,6 @@
 from rest_framework import viewsets, status
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.response import Response
-
 from api import serializers
 from api.models import ApiUser, Store, Item, Order
 from api.serializers import UserSerializer, StoreSerializer, ItemSerializer, OrderSerializer
@@ -11,7 +10,6 @@ class UserModelViewSet(viewsets.ModelViewSet):
     queryset = ApiUser.objects.all()
     http_method_names = ['post', 'get']
     serializer_class = UserSerializer
-
     authentication_classes = []
     permission_classes = []
 
@@ -48,6 +46,7 @@ class ItemModelViewSet(viewsets.ModelViewSet):
             raise serializers.ValidationError("Количество товара не может быть отрицательным.")
         serializer.save()
 
+
 class OrderModelViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
@@ -67,6 +66,8 @@ class OrderModelViewSet(viewsets.ModelViewSet):
             instance.save()
             return Response(self.get_serializer(instance).data, status=status.HTTP_200_OK)
         elif new_quantity is not None and new_quantity <= 0:
-            return Response({'error': 'Количество товара должно быть больше 0.'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'Количество товара должно быть больше 0.'},
+                            status=status.HTTP_400_BAD_REQUEST)
         else:
-            return Response({'error': 'Недостаточно товара на складе.'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'Недостаточно товара на складе.'},
+                            status=status.HTTP_400_BAD_REQUEST)

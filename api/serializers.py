@@ -12,10 +12,10 @@ class UserSerializer(serializers.Serializer):
 
     username = serializers.CharField(max_length=128, validators=[
         validators.UniqueValidator(ApiUser.objects.all())
-    ])
+        ])
     email = serializers.EmailField(validators=[
         validators.UniqueValidator(ApiUser.objects.all())
-    ])
+        ])
     password = serializers.CharField(min_length=6, max_length=20, write_only=True)
     user_type = serializers.ChoiceField(choices=('consumer', 'supplier'))
 

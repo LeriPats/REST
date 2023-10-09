@@ -10,8 +10,12 @@ router.register('orders', OrderModelViewSet)
 
 
 urlpatterns = [
-    path('warehouses/create/', StoreModelViewSet.as_view({'get': 'list'}), name='create-warehouse'),
-    path('products/<int:pk>/withdraw/', OrderModelViewSet.as_view(({'get': 'list'})), name='withdraw-product'),
-]
+    path('warehouses/create/',
+         StoreModelViewSet.as_view({'get': 'list'}),
+         name='create-warehouse'),
+    path('products/<int:pk>/withdraw/',
+         OrderModelViewSet.as_view(({'get': 'list'})),
+         name='withdraw-product'),
+    ]
 
 urlpatterns.extend(router.urls)
