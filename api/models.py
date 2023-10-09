@@ -7,7 +7,7 @@ class ApiUser(AbstractUser):
     user_types = (
         ('supplier', 'Поставщик'),
         ('consumer', 'Потребитель'),
-    )
+        )
     user_type = models.CharField(max_length=10, choices=user_types)
 
 
