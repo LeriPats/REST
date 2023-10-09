@@ -5,7 +5,7 @@ from django.db import models
 # Create your models here.
 class ApiUser(AbstractUser):
     user_types = (
-        ('suppllier', 'Поставщик'),
+        ('supplier', 'Поставщик'),
         ('consumer', 'Потребитель'),
         )
     user_type = models.CharField(max_length=10, choices=user_types)
