@@ -5,7 +5,7 @@ from django.db import models
 # Create your models here.
 class ApiUser(AbstractUser):
     user_types = (
-        ('supplier', 'Поставщик'),
+        ('suppllier', 'Поставщик'),
         ('consumer', 'Потребитель'),
         )
     user_type = models.CharField(max_length=10, choices=user_types)
@@ -34,3 +34,4 @@ class Order(models.Model):
 
     def __str__(self):
         return f"{self.user.username}; {self.item.store.name}; {self.item.name}"
+
