@@ -71,3 +71,5 @@ class OrderModelViewSet(viewsets.ModelViewSet):
         else:
             return Response({'error': 'Недостаточно товара на складе.'},
                             status=status.HTTP_400_BAD_REQUEST)
+
+# test migration
